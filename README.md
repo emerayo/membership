@@ -1,24 +1,66 @@
-# README
+# Library
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## CI Status
 
-Things you may want to cover:
+[![Ruby on Rails CI](https://github.com/emerayo/memberships/actions/workflows/rubyonrails.yml/badge.svg)](https://github.com/emerayo/library-api/actions/workflows/rubyonrails.yml)
 
-* Ruby version
+## System dependencies
 
-* System dependencies
+* PostgreSQL 14.0+
+* Ruby 3.2.2
 
-* Configuration
+## Setup
 
-* Database creation
+Copy the `sample.env` file:
 
-* Database initialization
+```shell
+$ cp sample.env .env
+```
 
-* How to run the test suite
+Now open `.env` file and make sure database environment variables are correct for your environment (use your Postgres configuration).
 
-* Services (job queues, cache servers, search engines, etc.)
+Install all gems and create the development and test databases:
 
-* Deployment instructions
+```shell
+$ bundle install
+$ bin/rails db:setup
+```
 
-* ...
+## Running the server
+
+To run the server locally, run the command:
+
+```shell
+$ rails s
+```
+
+You can stop the server by pressing:
+
+```
+CTRL + C
+```
+
+## Running the tests
+
+```shell
+$ bundle exec rspec
+```
+
+### Checking code coverage for the project
+
+After running `rspec`, it will generate a file in `coverage/index.html` containing the test results,
+simply open it on a browser to check the coverage.
+
+## Committing
+
+This project uses [Overcommit](https://github.com/sds/overcommit), a gem that run some checks before allowing you to commit your changes.
+Such as RuboCop, TrailingWhitespace and Brakeman.
+
+Install Overcommit hooks:
+
+```shell
+$ overcommit --sign
+$ overcommit --install
+```
+
+Now you can commit.
