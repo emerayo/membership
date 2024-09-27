@@ -7,6 +7,9 @@ describe Team, type: :model do
 
   describe 'associations' do
     it { should belong_to(:team_lead).class_name('User') }
+
+    it { should have_many(:memberships).dependent(:delete_all) }
+    it { should have_many(:users).through(:memberships) }
   end
 
   describe 'validations' do
