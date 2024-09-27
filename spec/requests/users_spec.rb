@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 describe 'API Users' do
-  let(:user) { create(:user) }
   let(:json_response) { response.parsed_body }
   let(:headers) do
     { 'Accept' => 'application/json',
