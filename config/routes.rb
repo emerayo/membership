@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     resources :memberships, only: :index, module: 'roles'
   end
 
-  resources :teams, only: %i[index show]
+  resources :teams, only: %i[index show] do
+    resources :memberships, only: %i[create update], module: 'teams'
+  end
+
   resources :users, only: %i[index show]
 end
