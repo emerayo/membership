@@ -79,4 +79,44 @@ describe 'API Role' do
       end
     end
   end
+
+  describe 'POST /roles' do
+    subject { post roles_url, params: params.to_json, headers: headers }
+
+    let(:valid_params) do
+      {
+        role: {
+          name: Faker::Book.genre
+        }
+      }
+    end
+
+    let(:invalid_params) do
+      {
+        role: {
+          name: nil
+        }
+      }
+    end
+
+    context 'with valid params' do
+      let(:params) { valid_params }
+
+      it 'creates a new Role and returns status code success 201' do
+        expect { subject }.to change { Role.count }.by(1)
+        expect(response).to have_http_status(:created)
+
+        expect(json_response['name']).to eq params[:role][:name]
+      end
+    end
+
+    context 'with missing params' do
+      let(:params) { invalid_params }
+
+      it 'returns status code unprocessable_entity 422' do
+        expect { subject }.not_to(change { Role.count })
+        expect(response.status).to eq 422
+      end
+    end
+  end
 end
