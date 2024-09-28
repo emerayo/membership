@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :membership do
-    role
-    team
-    user
+  factory :role do
+    name { 'developer' }
   end
 end

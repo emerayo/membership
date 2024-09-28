@@ -9,3 +9,12 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+puts 'Creating Roles...'
+
+roles = ['Developer', 'Product Owner', 'Tester']
+roles.each do |role|
+  Role.create!(name: role)
+end
+
+puts 'Finished creating Roles'
