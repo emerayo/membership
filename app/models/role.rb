@@ -7,9 +7,20 @@ class Role < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
 
+  before_destroy :prevent_default_role_destroy
+
   def self.default_role_id
     Rails.cache.fetch('cached_default_role_id', expires_in: 1.hour) do
       Role.find_by(name: DEFAULT_ROLE)&.id
     end
+  end
+
+  private
+
+  def prevent_default_role_destroy
+    return unless name == DEFAULT_ROLE
+
+    errors.add(:base, :cannot_destroy_default_role)
+    throw :abort
   end
 end
