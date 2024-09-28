@@ -9,6 +9,51 @@ describe 'API Teams - Memberships' do
       'Content-Type' => 'application/json' }
   end
 
+  describe 'GET /teams/:team_id/memberships/:id' do
+    subject { get team_membership_url(id, user_id), headers: headers }
+
+    let!(:user) { create(:user) }
+
+    let(:user_id) { user.id }
+
+    context 'when the Team does not exist' do
+      let!(:id) { 1 }
+
+      it 'returns status code not_found 404' do
+        subject
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when the Team exists but the User does not exist' do
+      let!(:id) { create(:team).id }
+      let(:user_id) { 1 }
+
+      it 'returns status code not_found 404' do
+        subject
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when the Membership exists' do
+      let!(:team) { create(:team) }
+      let!(:role) { create(:role, name: 'Product Owner') }
+      let!(:membership) { create(:membership, team: team, user: user, role: role) }
+      let(:id) { team.id }
+
+      it "returns the Membership's infos" do
+        subject
+
+        expect(response).to have_http_status(:ok)
+        expect(json_response['team_id']).to eq team.id
+        expect(json_response['user_id']).to eq user_id
+        expect(json_response['role_id']).to eq role.id
+      end
+    end
+  end
+
   describe 'POST /teams/:team_id/memberships' do
     subject { post team_memberships_url(id), headers: headers, params: params.to_json }
 

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   resources :teams, only: %i[index show] do
-    resources :memberships, only: %i[create update], module: 'teams'
+    resources :memberships, only: %i[create update show], module: 'teams'
   end
 
   resources :users, only: %i[index show]
