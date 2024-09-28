@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Membership < ApplicationRecord
+  self.primary_key = %i[team_id user_id]
+
   belongs_to :role
   belongs_to :team
   belongs_to :user
