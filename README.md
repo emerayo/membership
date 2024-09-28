@@ -2,7 +2,7 @@
 
 ## CI Status
 
-[![Ruby on Rails CI](https://github.com/emerayo/memberships/actions/workflows/rubyonrails.yml/badge.svg)](https://github.com/emerayo/library-api/actions/workflows/rubyonrails.yml)
+[![Ruby on Rails CI](https://github.com/emerayo/membership/actions/workflows/rubyonrails.yml/badge.svg)](https://github.com/emerayo/membership/actions/workflows/rubyonrails.yml)
 
 ## System dependencies
 
