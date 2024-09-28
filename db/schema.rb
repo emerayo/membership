@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_28_003842) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_28_003922) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -20,7 +20,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_28_003842) do
     t.uuid "team_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "role_id", null: false
+    t.index ["role_id"], name: "index_memberships_on_role_id"
     t.index ["team_id"], name: "index_memberships_on_team_id"
+    t.index ["user_id", "team_id"], name: "index_memberships_on_user_id_and_team_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
@@ -49,6 +52,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_28_003842) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "memberships", "roles"
   add_foreign_key "memberships", "teams"
   add_foreign_key "memberships", "users"
   add_foreign_key "teams", "users", column: "team_lead_id"

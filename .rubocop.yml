@@ -32,3 +32,8 @@ Rails/Output:
   Enabled: true
   Exclude:
     - 'db/seeds.rb'
+
+Rails/NotNullColumn:
+  Enabled: true
+  Exclude:
+    - 'db/migrate/20240928003922_change_memberships.rb'

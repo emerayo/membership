@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :membership do
+    role
     team
     user
   end

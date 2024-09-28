@@ -6,7 +6,7 @@ describe Role, type: :model do
   subject { build(:role) }
 
   describe 'associations' do
-    it { should have_many(:membership) }
+    it { should have_many(:memberships) }
   end
 
   describe 'validations' do
