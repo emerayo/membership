@@ -17,9 +17,8 @@ describe Membership, type: :model do
     describe 'prevent membership of team lead' do
       let(:team_lead) { create(:user) }
       let(:team) { create(:team, team_lead: team_lead) }
-      let!(:membership) { create(:membership, team: team) }
-
-      let(:new_membership) { build(:membership, team: team, user: user) }
+      let(:role) { create(:role, name: 'Product Owner') }
+      let(:new_membership) { build(:membership, team: team, user: user, role: role) }
 
       context 'when user is the team lead' do
         let(:user) { team_lead }
@@ -31,11 +30,23 @@ describe Membership, type: :model do
         end
       end
 
-      context 'when user is not the team lead' do
+      context 'when User is not the Team Lead nor on the Team' do
         let(:user) { create(:user) }
+        let!(:membership) { create(:membership, team: team) }
 
         it 'returns valid' do
           expect(new_membership.valid?).to be_truthy
+        end
+      end
+
+      context 'when User is already a member of the Team' do
+        let(:user) { create(:user) }
+        let!(:membership) { create(:membership, team: team, user: user) }
+        let(:new_membership) { build(:membership, team: team, user: user, role: role) }
+
+        it 'returns an error' do
+          expect(new_membership.valid?).to be_falsey
+          expect(new_membership.errors[:team_id]).to eq ['has already been taken']
         end
       end
     end
