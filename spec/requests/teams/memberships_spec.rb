@@ -86,8 +86,8 @@ describe 'API Teams - Memberships' do
       let(:invalid_params) do
         {
           membership: {
-            user_id: user.id,
-            role_id: nil
+            user_id: nil,
+            role_id: role.id
           }
         }
       end
@@ -105,10 +105,10 @@ describe 'API Teams - Memberships' do
         end
       end
 
-      context 'with missing params' do
+      context 'with invalid params' do
         let(:params) { invalid_params }
 
-        it 'returns status code unprocessable_entity 422' do
+        it 'does not create a new Membershup returns status code unprocessable_entity 422' do
           expect { subject }.not_to(change { Role.count })
           expect(response.status).to eq 422
         end
