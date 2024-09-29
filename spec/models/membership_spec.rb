@@ -13,6 +13,32 @@ describe Membership, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_uniqueness_of(:team_id).scoped_to(:user_id).case_insensitive }
+
+    describe 'prevent membership of team lead' do
+      let(:team_lead) { create(:user) }
+      let(:team) { create(:team, team_lead: team_lead) }
+      let!(:membership) { create(:membership, team: team) }
+
+      let(:new_membership) { build(:membership, team: team, user: user) }
+
+      context 'when user is the team lead' do
+        let(:user) { team_lead }
+        let(:error_msg) { 'User already assigned as Team Lead of this Team' }
+
+        it 'returns an error' do
+          expect(new_membership.valid?).to be_falsey
+          expect(new_membership.errors[:user_id]).to eq [error_msg]
+        end
+      end
+
+      context 'when user is not the team lead' do
+        let(:user) { create(:user) }
+
+        it 'returns valid' do
+          expect(new_membership.valid?).to be_truthy
+        end
+      end
+    end
   end
 
   describe 'callbacks' do
