@@ -83,7 +83,27 @@ $ docker compose run web bash
 Using Make:
 
 ```shell
-$ make console
+$ make bash
+```
+
+To exit the container:
+
+```shell
+$ exit
+```
+
+### Running Rails console
+
+To run the Rails console with Docker:
+
+```shell
+$ docker compose run web rails c
+```
+
+Using Make:
+
+```shell
+$ make dev.console
 ```
 
 To exit the container:
