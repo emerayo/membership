@@ -22,6 +22,10 @@ class RolesController < ApplicationController
     end
   end
 
+  def search
+    @roles = Role.by_name(params[:by_name])
+  end
+
   private
 
   def role_params
