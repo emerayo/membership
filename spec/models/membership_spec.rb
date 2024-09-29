@@ -42,7 +42,7 @@ describe Membership, type: :model do
   end
 
   describe 'callbacks' do
-    describe 'before_validation' do
+    describe 'after_initialize' do
       let!(:default_role) { create(:role) }
 
       before do
@@ -50,14 +50,10 @@ describe Membership, type: :model do
         Rails.cache.delete('cached_default_role_id')
       end
 
-      context 'when the Membership does not have a Role associated' do
-        let(:membership) { build(:membership, role: nil) }
+      context 'when the Membership is initialized without a Role' do
+        let(:membership) { Membership.new(role: nil) }
 
         it 'should associate the default Role to the record' do
-          expect(membership.role_id).to eq nil
-
-          membership.valid?
-
           expect(membership.role_id).to eq default_role.id
         end
       end
@@ -67,8 +63,6 @@ describe Membership, type: :model do
         let(:membership) { build(:membership, role: role) }
 
         it 'should not change the role_id' do
-          membership.valid?
-
           expect(membership.role_id).to eq role.id
         end
       end

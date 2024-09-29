@@ -10,7 +10,7 @@ class Membership < ApplicationRecord
   validates :team_id, uniqueness: { scope: :user_id, case_sensitive: false }
   validate :membership_different_team_lead, if: :team_id?
 
-  before_validation :assign_default_role, unless: :role_id?
+  after_initialize :assign_default_role, unless: :role_id?
 
   private
 
