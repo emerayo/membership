@@ -75,14 +75,27 @@ describe 'API Role' do
         expect(response).to have_http_status(:success)
       end
 
-      it 'returns an array with the expected Role' do
-        subject
+      context 'when there is no Membership assigned' do
+        it "returns the Role's info but no Memberships" do
+          subject
 
-        expect(json_response).to be_an_instance_of(Array)
-        expect(json_response.size).to eq 1
+          expect(json_response.first['id']).to eq role.id
+          expect(json_response.first['name']).to eq role.name
+          expect(json_response.first['memberships']).to eq []
+        end
+      end
 
-        expect(json_response.first['id']).to eq role.id
-        expect(json_response.first['name']).to eq role.name
+      context 'when there is at least one Membership assigned' do
+        let!(:membership) { create(:membership, role: role) }
+
+        it "returns the Role's info and the Memberships'" do
+          subject
+
+          expect(json_response.first['id']).to eq role.id
+          expect(json_response.first['name']).to eq role.name
+          expect(json_response.first['memberships'].first['team_id']).to eq membership.team_id
+          expect(json_response.first['memberships'].first['user_id']).to eq membership.user_id
+        end
       end
     end
 
@@ -132,6 +145,29 @@ describe 'API Role' do
 
         expect(json_response['id']).to eq role.id
         expect(json_response['name']).to eq role.name
+      end
+
+      context 'when there is no Membership assigned' do
+        it "returns the Role's info but no Memberships" do
+          subject
+
+          expect(json_response['id']).to eq role.id
+          expect(json_response['name']).to eq role.name
+          expect(json_response['memberships']).to eq []
+        end
+      end
+
+      context 'when there is at least one Membership assigned' do
+        let!(:membership) { create(:membership, role: role) }
+
+        it "returns the Role's info and the Memberships'" do
+          subject
+
+          expect(json_response['id']).to eq role.id
+          expect(json_response['name']).to eq role.name
+          expect(json_response['memberships'].first['team_id']).to eq membership.team_id
+          expect(json_response['memberships'].first['user_id']).to eq membership.user_id
+        end
       end
     end
   end

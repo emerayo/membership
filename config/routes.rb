@@ -5,8 +5,6 @@ Rails.application.routes.draw do
     collection do
       get 'search'
     end
-
-    resources :memberships, only: :index, module: 'roles'
   end
 
   resources :teams, only: %i[index show] do
