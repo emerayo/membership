@@ -2,6 +2,12 @@
 
 module Teams
   class MembershipsController < ApplicationController
+    # GET /teams/:team_id/memberships/:id
+    def show
+      @membership = Membership.find_by!(team_id: params[:team_id], user_id: params[:id])
+      render json: @membership
+    end
+
     # POST /teams/:team_id/memberships
     def create
       @team = Team.find(params[:team_id])
