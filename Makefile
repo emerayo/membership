@@ -29,5 +29,8 @@ rubocop.fix: ## Runs the Rubocop Linter and executes the available autocorrectio
 tests: ## Runs RSpec tests
 	@docker compose run web rspec spec
 
-console: ## Opens the bash inside the container
+bash: ## Opens the bash inside the container
 	@docker compose run web bash
+
+dev.console: ## Opens the Rails console
+	@docker compose run web rails c
