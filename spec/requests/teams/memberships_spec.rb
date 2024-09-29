@@ -103,6 +103,31 @@ describe 'API Teams - Memberships' do
           expect(json_response['user_id']).to eq params[:membership][:user_id]
           expect(json_response['role_id']).to eq params[:membership][:role_id]
         end
+
+        context 'when passing the Role name instead of Role ID' do
+          let(:valid_params) do
+            {
+              membership: {
+                user_id: user.id,
+                role_name: role.name
+              }
+            }
+          end
+
+          before do
+            # Need to clear the cached properties
+            Rails.cache.delete('cached_default_role_id')
+          end
+
+          it 'creates a new Membership and assigns the Role correctly' do
+            expect { subject }.to change { Membership.count }.by(1)
+            expect(response).to have_http_status(:created)
+
+            expect(json_response['team_id']).to eq id
+            expect(json_response['user_id']).to eq params[:membership][:user_id]
+            expect(json_response['role_id']).to eq role.id
+          end
+        end
       end
 
       context 'with invalid params' do
@@ -179,6 +204,31 @@ describe 'API Teams - Memberships' do
           expect(json_response['team_id']).to eq team.id
           expect(json_response['user_id']).to eq user_id
           expect(json_response['role_id']).to eq new_role.id
+        end
+
+        context 'when passing the Role name instead of Role ID' do
+          let(:valid_params) do
+            {
+              membership: {
+                user_id: user.id,
+                role_name: new_role.name
+              }
+            }
+          end
+
+          before do
+            # Need to clear the cached properties
+            Rails.cache.delete('cached_default_role_id')
+          end
+
+          it 'updates the Membership and assigns the new Role correctly' do
+            subject
+
+            expect(response).to have_http_status(:ok)
+            expect(json_response['team_id']).to eq id
+            expect(json_response['user_id']).to eq params[:membership][:user_id]
+            expect(json_response['role_id']).to eq new_role.id
+          end
         end
       end
 

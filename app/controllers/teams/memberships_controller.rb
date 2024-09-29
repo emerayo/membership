@@ -2,6 +2,8 @@
 
 module Teams
   class MembershipsController < ApplicationController
+    before_action :role_params_by_name, only: %i[create update]
+
     # GET /teams/:team_id/memberships/:id
     def show
       @membership = Membership.find_by!(team_id: params[:team_id], user_id: params[:id])
@@ -34,11 +36,21 @@ module Teams
     private
 
     def membership_params
-      params.require(:membership).permit(:role_id, :user_id).merge(team_id: params[:team_id])
+      params.require(:membership)
+            .permit(:role_id, :user_id)
+            .merge(team_id: params[:team_id])
     end
 
     def update_params
-      params.require(:membership).permit(:role_id)
+      params.require(:membership)
+            .permit(:role_id)
+    end
+
+    def role_params_by_name
+      return unless params['membership']['role_name']
+
+      role_id = Role.find_by(name: params['membership']['role_name']).id
+      params['membership'].merge!(role_id: role_id)
     end
   end
 end
