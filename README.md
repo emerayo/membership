@@ -1,4 +1,4 @@
-# Library
+# Memberships
 
 ## CI Status
 
@@ -10,7 +10,101 @@
 * Ruby 3.2.2
 * Redis 7.2.4
 
-## Setup
+## Setup with Docker
+
+### Setting up the containers
+
+Download and setup containers:
+
+```shell
+$ docker compose up -d
+```
+
+For the convenience, this app has a Makefile
+to make it easier to run commands related to Docker
+If you need with the Make commands, run:
+
+```shell
+$ make help
+```
+
+Using Make:
+
+```shell
+$ make containers.up
+```
+
+To stop the containers:
+
+```shell
+$ docker compose down -v
+```
+
+Using Make:
+
+```shell
+$ make containers.down
+```
+
+### Installing gems
+
+When setting up the containers, the gems should be already installed. If you change the Gemfile, run:
+
+```shell
+$ docker compose up -d
+```
+Using Make:
+
+```shell
+$ make bundle
+```
+
+### Setting up the database
+
+To setup the database and run migrations:
+
+```shell
+$ docker compose run web rails db:create db:setup
+```
+Using Make:
+
+```shell
+$ make db.setup
+```
+
+### Attaching to the container
+
+To attach the console to the container:
+
+```shell
+$ docker compose run web bash
+```
+
+Using Make:
+
+```shell
+$ make console
+```
+
+To exit the container:
+
+```shell
+$ exit
+```
+
+### Checking CPU and Memory usage:
+
+```shell
+$ docker stats
+```
+
+Using Make:
+
+```shell
+$ make containers.stats
+```
+
+## Setup without Docker
 
 Copy the `sample.env` file:
 
@@ -43,6 +137,20 @@ CTRL + C
 
 ## Running the tests
 
+With Docker:
+
+```shell
+$ docker compose run web bundle exec rspec
+```
+
+Using Make:
+
+```shell
+$ make tests
+```
+
+Without Docker:
+
 ```shell
 $ bundle exec rspec
 ```
@@ -51,6 +159,35 @@ $ bundle exec rspec
 
 After running `rspec`, it will generate a file in `coverage/index.html` containing the test results,
 simply open it on a browser to check the coverage.
+
+## Linter
+
+This project uses Rubocop as linter
+
+To run it with Docker:
+
+
+```shell
+$ docker compose run web bundle exec rubocop
+```
+
+Using Make:
+
+```shell
+$ make rubocop
+```
+
+To fix the issues automatically:
+
+```shell
+$ docker compose run web bundle exec rubocop -A
+```
+
+Using Make:
+
+```shell
+$ make rubocop.fix
+```
 
 ## Committing
 
