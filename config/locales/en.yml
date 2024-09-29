@@ -31,6 +31,10 @@ en:
   activerecord:
     errors:
       models:
+        membership:
+          attributes:
+            user_id:
+              user_is_team_lead: User already assigned as Team Lead of this Team
         role:
           attributes:
             base:

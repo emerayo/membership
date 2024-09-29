@@ -13,10 +13,36 @@ describe Membership, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_uniqueness_of(:team_id).scoped_to(:user_id).case_insensitive }
+
+    describe 'prevent membership of team lead' do
+      let(:team_lead) { create(:user) }
+      let(:team) { create(:team, team_lead: team_lead) }
+      let!(:membership) { create(:membership, team: team) }
+
+      let(:new_membership) { build(:membership, team: team, user: user) }
+
+      context 'when user is the team lead' do
+        let(:user) { team_lead }
+        let(:error_msg) { 'User already assigned as Team Lead of this Team' }
+
+        it 'returns an error' do
+          expect(new_membership.valid?).to be_falsey
+          expect(new_membership.errors[:user_id]).to eq [error_msg]
+        end
+      end
+
+      context 'when user is not the team lead' do
+        let(:user) { create(:user) }
+
+        it 'returns valid' do
+          expect(new_membership.valid?).to be_truthy
+        end
+      end
+    end
   end
 
   describe 'callbacks' do
-    describe 'before_validation' do
+    describe 'after_initialize' do
       let!(:default_role) { create(:role) }
 
       before do
@@ -24,14 +50,10 @@ describe Membership, type: :model do
         Rails.cache.delete('cached_default_role_id')
       end
 
-      context 'when the Membership does not have a Role associated' do
-        let(:membership) { build(:membership, role: nil) }
+      context 'when the Membership is initialized without a Role' do
+        let(:membership) { Membership.new(role: nil) }
 
         it 'should associate the default Role to the record' do
-          expect(membership.role_id).to eq nil
-
-          membership.valid?
-
           expect(membership.role_id).to eq default_role.id
         end
       end
@@ -41,8 +63,6 @@ describe Membership, type: :model do
         let(:membership) { build(:membership, role: role) }
 
         it 'should not change the role_id' do
-          membership.valid?
-
           expect(membership.role_id).to eq role.id
         end
       end
