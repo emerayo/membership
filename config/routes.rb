@@ -2,6 +2,10 @@
 
 Rails.application.routes.draw do
   resources :roles, only: %i[create index show] do
+    collection do
+      get 'search'
+    end
+
     resources :memberships, only: :index, module: 'roles'
   end
 

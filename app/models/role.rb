@@ -9,6 +9,8 @@ class Role < ApplicationRecord
 
   before_destroy :prevent_default_role_destroy
 
+  scope :by_name, ->(string) { where('name ILIKE ?', "%#{string}%") }
+
   def self.default_role_id
     Rails.cache.fetch('cached_default_role_id', expires_in: 1.hour) do
       Role.find_by(name: DEFAULT_ROLE)&.id

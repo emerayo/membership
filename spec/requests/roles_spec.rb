@@ -48,6 +48,62 @@ describe 'API Role' do
     end
   end
 
+  describe 'GET /search' do
+    subject { get search_roles_url, params: { by_name: 'owner' }, headers: headers }
+
+    context 'when there is no Role' do
+      it 'returns status code ok 200' do
+        subject
+
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns a blank array' do
+        subject
+
+        expect(json_response).to be_an_instance_of(Array)
+        expect(json_response).to eq([])
+      end
+    end
+
+    context 'when there is at least one Role and matches the params' do
+      let!(:role) { create(:role, name: 'Product Owner') }
+
+      it 'returns status code ok 200' do
+        subject
+
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns an array with the expected Role' do
+        subject
+
+        expect(json_response).to be_an_instance_of(Array)
+        expect(json_response.size).to eq 1
+
+        expect(json_response.first['id']).to eq role.id
+        expect(json_response.first['name']).to eq role.name
+      end
+    end
+
+    context 'when there is at least one Role but does not match the params' do
+      let!(:role) { create(:role, name: 'Tester') }
+
+      it 'returns status code ok 200' do
+        subject
+
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns a blank array' do
+        subject
+
+        expect(json_response).to be_an_instance_of(Array)
+        expect(json_response.size).to eq 0
+      end
+    end
+  end
+
   describe 'GET /role/:id' do
     subject { get role_url(id), headers: headers }
 
