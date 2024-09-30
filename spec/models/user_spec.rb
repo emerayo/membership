@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   subject { build(:user) }
 
+  it_behaves_like 'Cacheable', 'users/all', :user
+
   describe 'associations' do
     it do
       should have_many(:leading_teams).dependent(:nullify)

@@ -9,6 +9,11 @@ describe 'API Users' do
       'Content-Type' => 'application/json' }
   end
 
+  before do
+    # Need to clear the cached properties
+    Rails.cache.delete('users/all')
+  end
+
   describe 'GET /users' do
     subject { get users_url, headers: headers }
 
