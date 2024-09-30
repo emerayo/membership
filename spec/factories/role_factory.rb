@@ -4,4 +4,8 @@ FactoryBot.define do
   factory :role do
     name { 'Developer' }
   end
+
+  trait :tester do
+    name { 'Tester' }
+  end
 end

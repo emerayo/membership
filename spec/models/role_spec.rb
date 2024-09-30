@@ -7,7 +7,7 @@ describe Role, type: :model do
 
   let(:cache_key) { 'roles/all' }
 
-  it_behaves_like 'Cacheable', 'roles/all', :role
+  it_behaves_like 'Cacheable', 'roles/all', :role, :tester
 
   describe 'associations' do
     it { should have_many(:memberships) }
