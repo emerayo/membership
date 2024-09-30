@@ -10,6 +10,11 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+if Role.any?
+  puts 'Roles already created, skipping db:seed'
+  return
+end
+
 puts 'Creating Roles...'
 
 roles = ['Developer', 'Product Owner', 'Tester']
