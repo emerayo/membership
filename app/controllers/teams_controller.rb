@@ -8,6 +8,6 @@ class TeamsController < ApplicationController
 
   # GET /teams/:id
   def show
-    @team = Team.find(params[:id])
+    @team = Team.includes(memberships: :role).find(params[:id])
   end
 end

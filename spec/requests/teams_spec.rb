@@ -89,20 +89,21 @@ describe 'API Teams' do
       context 'when Team has members' do
         let!(:membership) { create(:membership, team: team) }
 
-        it 'returns status code ok 200' do
+        it "returns the Team's info, its Memberships and status code ok 200" do
           subject
 
           expect(response).to have_http_status(:success)
-        end
-
-        it "returns the team's info" do
-          subject
 
           expect(json_response['id']).to eq team.id
           expect(json_response['name']).to eq team.name
           expect(json_response['teamLeadId']).to eq team.team_lead_id
           expect(json_response['teamMemberIds']).to be_an_instance_of(Array)
           expect(json_response['teamMemberIds'].first).to eq membership.user_id
+
+          expect(json_response['memberships']).to be_an_instance_of(Array)
+          expect(json_response['memberships'].first['user_id']).to eq membership.user_id
+          expect(json_response['memberships'].first['role_id']).to eq membership.role_id
+          expect(json_response['memberships'].first['role_name']).to eq membership.role_name
         end
       end
     end
