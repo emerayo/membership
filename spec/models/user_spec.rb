@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   subject { build(:user) }
 
-  it_behaves_like 'Cacheable', 'users/all', :user
+  it_behaves_like 'Cacheable', 'users/all', :user, nil, :first_name
 
   describe 'associations' do
     it do
