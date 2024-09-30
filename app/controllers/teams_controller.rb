@@ -3,7 +3,7 @@
 class TeamsController < ApplicationController
   # GET /teams
   def index
-    @teams = Team.all
+    @teams = Team.cached_relation
   end
 
   # GET /teams/:id

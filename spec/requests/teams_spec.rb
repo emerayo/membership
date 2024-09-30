@@ -9,6 +9,11 @@ describe 'API Teams' do
       'Content-Type' => 'application/json' }
   end
 
+  before do
+    # Need to clear the cached properties
+    Rails.cache.delete('teams/all')
+  end
+
   describe 'GET /teams' do
     subject { get teams_url, headers: headers }
 
