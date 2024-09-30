@@ -52,6 +52,10 @@ describe Membership, type: :model do
     end
   end
 
+  describe 'delegations' do
+    it { should delegate_method(:name).to(:role).with_prefix(true) }
+  end
+
   describe 'callbacks' do
     describe 'after_initialize' do
       let!(:default_role) { create(:role) }
