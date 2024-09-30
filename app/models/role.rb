@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Role < ApplicationRecord
+  include Cacheable
+
   DEFAULT_ROLE = 'Developer'
 
   has_many :memberships, dependent: :nullify

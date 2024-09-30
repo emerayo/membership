@@ -3,7 +3,7 @@
 class RolesController < ApplicationController
   # GET /roles
   def index
-    @roles = Role.all
+    @roles = Role.cached_relation
   end
 
   # GET /roles/:id
