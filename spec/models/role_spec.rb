@@ -5,6 +5,10 @@ require 'rails_helper'
 describe Role, type: :model do
   subject { build(:role) }
 
+  let(:cache_key) { 'roles/all' }
+
+  it_behaves_like 'Cacheable', 'roles/all', :role
+
   describe 'associations' do
     it { should have_many(:memberships) }
   end

@@ -5,6 +5,8 @@ require 'rails_helper'
 describe Team, type: :model do
   subject { build(:team) }
 
+  it_behaves_like 'Cacheable', 'teams/all', :team
+
   describe 'associations' do
     it { should belong_to(:team_lead).class_name('User') }
 

@@ -20,6 +20,9 @@ bundle: ## Installs library dependencies
 db.setup: ## Creates the database, runs migrations and seeds the data
 	@docker compose run web rails db:create db:migrate db:seed
 
+db.setup.test: ## Creates the database, runs migrations in test environment
+	@docker compose run -e RAILS_ENV=test web rails db:create db:migrate
+
 rubocop: ## Runs the Rubocop Linter
 	@docker compose run web bundle exec rubocop
 

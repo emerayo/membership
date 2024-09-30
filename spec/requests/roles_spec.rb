@@ -9,6 +9,11 @@ describe 'API Role' do
       'Content-Type' => 'application/json' }
   end
 
+  before do
+    # Need to clear the cached properties
+    Rails.cache.delete('roles/all')
+  end
+
   describe 'GET /roles' do
     subject { get roles_url, headers: headers }
 

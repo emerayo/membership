@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include Cacheable
+
   has_many :leading_teams, dependent: :nullify, foreign_key: :team_lead_id, inverse_of: :team_lead,
                            class_name: 'Team'
   has_many :memberships, dependent: :delete_all
