@@ -12,6 +12,8 @@ class Membership < ApplicationRecord
 
   after_initialize :assign_default_role, unless: :role_id?
 
+  delegate :name, to: :role, prefix: true
+
   private
 
   def membership_different_team_lead
