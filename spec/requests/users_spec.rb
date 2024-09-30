@@ -70,14 +70,10 @@ describe 'API Users' do
       let!(:user) { create(:user) }
       let(:id) { user.id }
 
-      it 'returns status code ok 200' do
+      it "returns the user's info and status code ok 200" do
         subject
 
         expect(response).to have_http_status(:success)
-      end
-
-      it "returns the user's info" do
-        subject
 
         expect(json_response['id']).to eq user.id
         expect(json_response['displayName']).to eq user.display_name
@@ -85,6 +81,34 @@ describe 'API Users' do
         expect(json_response['lastName']).to eq user.last_name
         expect(json_response['avatarUrl']).to eq user.avatar_url
         expect(json_response['location']).to eq user.location
+      end
+
+      context 'when User has a Membership' do
+        let(:role) { create(:role) }
+        let!(:membership) { create(:membership, user: user, role: role) }
+
+        it "returns the User's info, its Memberships' status code ok 200" do
+          subject
+
+          expect(response).to have_http_status(:success)
+
+          expect(json_response['memberships'].first['team_id']).to eq membership.team_id
+          expect(json_response['memberships'].first['role_id']).to eq role.id
+          expect(json_response['memberships'].first['role_name']).to eq role.name
+        end
+      end
+
+      context 'when User is a Team Lead of one Team' do
+        let!(:team) { create(:team, team_lead: user) }
+
+        it "returns the User's info, its Leading Team's and status code ok 200" do
+          subject
+
+          expect(response).to have_http_status(:success)
+
+          expect(json_response['leading_teams'].first['id']).to eq team.id
+          expect(json_response['leading_teams'].first['name']).to eq team.name
+        end
       end
     end
   end
