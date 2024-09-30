@@ -112,6 +112,20 @@ To exit the container:
 $ exit
 ```
 
+### Setting up test database
+
+To create the database and run migrations on test environment with Docker:
+
+```shell
+$ docker compose run -e RAILS_ENV=test web rails db:create db:migrate
+```
+
+Using Make:
+
+```shell
+$ make dev.setup.test
+```
+
 ### Checking CPU and Memory usage:
 
 ```shell
